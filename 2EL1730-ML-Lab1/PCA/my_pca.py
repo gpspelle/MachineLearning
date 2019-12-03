@@ -4,6 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import pylab
 from numpy import genfromtxt
 import csv
+from sklearn.preprocessing import Normalizer
 
 # Load the data set (wine). Variable data stores the final data (178 x 13)
 my_data = np.genfromtxt('wine_data.csv', delimiter=',')
@@ -29,10 +30,23 @@ ax1.set_title("Vizualization of the dataset (3 out of 13 dimensions)")
 #				dimensionality to 2 and 3. Save the projected
 #				data in variables newData2 and newData3 respectively
 #
-#ehfuiaefiuahfaiuh Note: To compute the eigenvalues and eigenvectors of a matrix
+# Note: To compute the eigenvalues and eigenvectors of a matrix
 #		use the function eigval,eigvec = np.linalg.eig(M)
 #
 #=============================================================================
+
+
+# Normalize data
+transformer = Normalizer().fit(data)
+norm_data = transformer.transform(data)
+cov = np.dot(np.transpose(norm_data), norm_data)
+eigval, eigvec = np.linalg.eig(cov)
+diag_2 = np.diag(eigval[:2])
+diag_3 = np.diag(eigval[:3])
+
+newData2 = np.dot(norm_data[:, :2], diag_2)
+newData3 = np.dot(norm_data[:, :3], diag_3)
+
 
 # Plot the first two principal components
 plt.figure(2)

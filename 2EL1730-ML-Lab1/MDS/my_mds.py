@@ -1,23 +1,28 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.linalg import sqrtm
 
 # Load the distance matrix
 D = np.loadtxt('distanceMatrix.csv', delimiter=',')
 cities = ['Atl', 'Chi', 'Den', 'Hou', 'LA', 'Mia', 'NYC', 'SF', 'Sea', 'WDC']
 nCities = D.shape[0]  # Get the size of the matrix
 
-
+I = np.identity(nCities)
+J = I - np.ones(shape=(nCities, nCities)) / nCities
+B = (-1/2) * np.dot(J, D, J)
+eigval, eigvec = np.linalg.eig(B)
 k = 2  # e.g. we want to keep 2 dimensions
+X = np.dot(eigvec[:, :k], sqrtm(np.diag(eigval[:k])))
 
 #================= ADD YOUR CODE HERE ====================================
 ## TODO: Implement MDS
 ## Add your code here
 # Instructions: Use MDS to reduce the dimensionality of the data
 #				while preserving the distances between all pairs
-#				of points. Use the steps given in the description 
+#				of points. Use the steps given in the description
 #				of the assignment. Initially, calculate matrix J
 # 				and subsequently, matrix B. Perform SVD decomposition
-#				of B. Calculate new representation. Save the new 
+#				of B. Calculate new representation. Save the new
 #				representation in variable X
 
 
